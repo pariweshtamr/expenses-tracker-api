@@ -19,10 +19,13 @@ mongoClient()
 
 // IMPORT ROUTERS
 import userRouter from "./src/routers/userRouter.js"
+import transactionRouter from "./src/routers/transactionRouter.js"
+import { isAuth } from "./src/middleware/authMiddleware.js"
 
 // USE ROUTERS
 
 app.use("/api/v1/user", userRouter)
+app.use("/api/v1/transaction", isAuth, transactionRouter)
 
 // catch when router is not found
 app.use("*", (req, res, next) => {
