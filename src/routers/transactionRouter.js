@@ -3,7 +3,7 @@ import {
   deleteTransaction,
   getAllTransactions,
   insertTransaction,
-} from "../models/transaction/TransactionModel"
+} from "../models/transaction/TransactionModel.js"
 
 const transactionRouter = express.Router()
 
@@ -26,9 +26,12 @@ transactionRouter.get("/", async (req, res, next) => {
 transactionRouter.post("/", async (req, res, next) => {
   try {
     const { authorization } = req.headers
-    const res = await insertTransaction({ ...req.body, userId: authorization })
+    const response = await insertTransaction({
+      ...req.body,
+      userId: authorization,
+    })
 
-    res?._id
+    response?._id
       ? res.json({
           status: "success",
           message: "Transaction added successfully!",
@@ -46,9 +49,9 @@ transactionRouter.post("/", async (req, res, next) => {
 transactionRouter.delete("/", async (req, res, next) => {
   try {
     const { authorization } = req.headers
-    const res = await deleteTransaction(req.body, authorization)
+    const result = await deleteTransaction(req.body, authorization)
 
-    res?.deletedCount
+    result?.deletedCount
       ? res.json({
           status: "success",
           message: res.deletedCount + "item(s) deleted",

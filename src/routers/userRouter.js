@@ -3,12 +3,10 @@ import { createUser, getUser } from "../models/user/UserModel.js"
 
 const userRouter = express.Router()
 
-// Create user
+// Register user
 userRouter.post("/", async (req, res, next) => {
   try {
     const user = await createUser(req.body)
-
-    console.log(user)
 
     if (user?._id) {
       return res.json({
@@ -18,15 +16,19 @@ userRouter.post("/", async (req, res, next) => {
     }
     res.json({
       status: "error",
-      message: "Unable to create user. Pklease try again later!",
+      message: "Unable to create user. Please try again later!",
     })
   } catch (error) {
+    let msg = "Error, Unable to create new user"
+
     if (error.message.includes("E11000 duplicate key error collection")) {
-      error.code = 200
-      error.message =
-        "There is aleray another user exist with the same email, Pelase rest passowrd to use or use different email to register"
+      msg = "Error, an account already exists for this email address"
     }
-    next(error)
+    res.json({
+      status: "error",
+      message:
+        "Unable to create new user because an account already exists for this email address",
+    })
   }
 })
 

@@ -1,4 +1,4 @@
-import Transaction from "./TransactionSchema"
+import Transaction from "./TransactionSchema.js"
 
 // Insert
 export const insertTransaction = (obj) => {
